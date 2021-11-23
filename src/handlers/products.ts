@@ -1,0 +1,76 @@
+import express, { Request, Response } from 'express';
+import { Product, ProductStore } from '../models/products';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const store = new ProductStore();
+const index = async (_req: Request, res: Response) => {
+  const products = await store.index();
+  res.json(products);
+}
+
+const show = async (req: Request, res: Response) => {
+  const product = await store.show(req.body.id);
+  res.json(product);
+}
+
+const create = async (req: Request, res: Response) => {
+  const product: Product = {
+    name: req.body.name,
+    type: req.body.type,
+    category: req.body.category,
+    weight: req.body.weight,
+    price: req.body.price
+  };
+
+  try {
+    // the token should be retrieved from the authorizazion header after the Bearer string
+    // but for simplicity we put it as part of the request body for now
+    //const authorizationHeader: string = (req.headers.authorization as string);
+    //const token = authorizationHeader.split(' ')[1];
+    //jwt.verify(token, (process.env.TOKEN_SECRET as string));
+    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+  } catch (err) {
+    res.status(401); // unauthorized
+    res.json(`Invalid token ${err}`);
+    return;
+  }
+
+  try {
+    const newProduct = await store.create(product);
+    res.json(newProduct);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+}
+
+const destroy = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = (req.headers.authorization as string);
+    const token = authorizationHeader.split(' ')[1];
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
+  } catch (err) {
+    res.status(401);
+    res.json('Access denied. Invalid token.');
+    return;
+  }
+
+  try {
+    const deleted = await store.delete(req.body.id);
+    res.json(deleted);
+  } catch (err) {
+    res.status(400);
+    res.json({err});
+  }
+}
+
+const product_routes = (app: express.Application) => {
+  app.get('/products', index);
+  app.get('/products/:id', show);
+  app.post('/products', create);
+  app.post('/products/:id', destroy);
+}
+
+export default product_routes;
