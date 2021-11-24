@@ -1,12 +1,20 @@
 import express, { Request, Response } from 'express';
 import { Product, ProductStore } from '../models/products';
 import jwt from 'jsonwebtoken';
+import url from 'url';
 import dotenv from 'dotenv';
 
 dotenv.config();
 const store = new ProductStore();
-const index = async (_req: Request, res: Response) => {
-  const products = await store.index();
+const index = async (req: Request, res: Response) => {
+  const query = url.parse(req.url, true).query;
+  const category: string = (query.category as string);
+  let products = undefined;
+  if(category === "" || category == undefined) {
+    products = await store.index();
+  } else {
+    products = await store.indexByCategory(category);
+  }
   res.json(products);
 }
 

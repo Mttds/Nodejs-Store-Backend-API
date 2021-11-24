@@ -22,6 +22,18 @@ export class ProductStore {
     }
   }
 
+  async indexByCategory(category: string): Promise<Product[]> {
+    try {
+      const conn = await dbclient.connect();
+      const sql = 'SELECT * FROM products WHERE category = $1';
+      const result = await conn.query(sql, [category]);
+      conn.release;
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Cannot get products ${err}`);
+    }
+  }
+
   async show(id: string): Promise<Product> {
     try {
       const sql = 'SELECT * FROM products WHERE id=($1)';

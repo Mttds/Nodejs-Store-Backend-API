@@ -2,6 +2,8 @@
 
 ## NPM scripts
 
+To setup all the required packages run: `npm install` in the project root folder. It will install the packages listed in package.json.
+
 ## Required Technologies
 
 The application uses the following libraries:
@@ -28,24 +30,55 @@ The .env file in the application root folder contains the following variables:
 
 ## API Endpoints
 
-| Type                              | URI                          | Method   | Auth
-| --------------------------------- | ---------------------------- | -------- | ------------
-| Products INDEX route              | /products/                   | [GET]    | None
-| Products INDEX by category        | /products?category=:category | [GET]    | None
-| Products SHOW route               | /products/:id                | [GET]    | None
-| Products CREATE route             | /products/                   | [POST]   | JWT Token
-| Products DELETE route             | /products/:id                | [POST]   | JWT Token
-| Users INDEX route                 | /users/                      | [GET]    | JWT Token
-| Users SHOW route                  | /users/:id                   | [GET]    | JWT Token
-| Users CREATE route                | /users/                      | [POST]   | JWT Token
-| Orders INDEX route                | /orders/                     | [GET]    | JWT Token
-| Orders SHOW route                 | /orders/:id                  | [GET]    | JWT Token
-| Orders CREATE route               | /orders/                     | [POST]   | JWT Token
-| Orders DELETE route               | /orders/:id                  | [POST]   | JWT Token
-| Current Order by user             | /users/:id/current-order     | [GET]    | JWT Token
-| Completed Orders by user          | /users/:id/completed-orders  | [GET]    | JWT Token
+| Type                              | URI                                  | Method   | Authentication/Authorization
+| --------------------------------- | ------------------------------------ | -------- | ------------
+| Products INDEX route              | /products/                           | [GET]    | None
+| Products INDEX by category        | /products?category=:category         | [GET]    | None
+| Products SHOW route               | /products/:id                        | [GET]    | None
+| Products CREATE route             | /products/                           | [POST]   | JWT Token
+| Products DELETE route             | /products/:id                        | [POST]   | JWT Token
+| Users INDEX route                 | /users/                              | [GET]    | JWT Token
+| Users SHOW route                  | /users/:id                           | [GET]    | JWT Token
+| Users CREATE route                | /users/                              | [POST]   | Signed JWT Token Returned
+| Users AUTH route                  | /users/authenticate                  | [POST]   | Password
+| Orders INDEX route                | /orders/                             | [GET]    | JWT Token
+| Orders SHOW route                 | /orders/:id                          | [GET]    | JWT Token
+| Orders CREATE route               | /orders/                             | [POST]   | JWT Token
+| Orders DELETE route               | /orders/:id                          | [POST]   | JWT Token
+| Orders ADDITEM route              | /orders/:id/items                    | [POST]   | JWT Token
+| Orders SUBMIT route               | /orders/:id/submit                   | [POST]   | JWT Token
+| Current Order by user             | /orders/current?username=:username   | [GET]    | JWT Token
+| Completed Orders by user          | /orders/completed?username=:username | [GET]    | JWT Token
 
-# Database Models
+## Database
+
+The postgresql database runs on the default port 5432. To connect to the database the .env file in the project root folder should have the following variables:
+
+- DATABASE_HOST: database server;
+- DATABASE_NAME: dev database name;
+- DATABASE_USER: database user;
+- DATABASE_PASSWD: database password;
+
+, Or DATABASE_TEST_NAME (test database name) instead of DATABASE_NAME if run with ENV=test. The JavaScript driver to connect to the DB is pg and should be an available package for the project.
+
+The file database.json in the root folder should be created with the following structure:
+
+{
+    "dev": {
+        "driver": "pg",
+        "host": "127.0.0.1",
+        "database": "<dbname>",
+        "user": "<dbuser>",
+        "password": "<dbpwd>"
+    },
+    "test": {
+        "driver": "pg",
+        "host": "127.0.0.1",
+        "database": "<dbname>",
+        "user": "<dbuser>",
+        "password": "<dbpwd>"
+    }
+}
 
 - products
 
