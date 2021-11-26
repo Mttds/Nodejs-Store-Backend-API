@@ -43,7 +43,7 @@ export class OrderStore {
       const sql2 = "SELECT id FROM orders WHERE user_id = $1 and status = 'active'";
       const conn = await dbclient.connect();
       let result = await conn.query(sql2, [b.user_id]);
-      if(!(result.rows[0] != undefined && 'id' in result.rows[0])) {
+      if(result.rows[0] != undefined) {
         throw new Error(`User ${b.user_id} has already an active order in the Database.`);
       }
 
@@ -53,6 +53,19 @@ export class OrderStore {
       return order;
     } catch (err) {
       throw new Error(`Could not create order ${b}. Error: ${err}`);
+    }
+  }
+
+  async delete(id: string): Promise<Order> {
+    try {
+      const sql = 'DELETE FROM orders WHERE id=($1)';
+      const conn = await dbclient.connect();
+      const result = await conn.query(sql, [id])
+      const order = result.rows[0];
+      conn.release();
+      return order;
+    } catch (err) {
+      throw new Error(`Could not delete order ${id}. Error: ${err}`);
     }
   }
 

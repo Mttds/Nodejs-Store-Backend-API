@@ -1,11 +1,11 @@
 {
-  "name": "database-demo",
+  "name": "Nodejs-Store-Backend-API",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "jasmine": "jasmine",
-    "test": "ENV=test node node_modules/db-migrate --env test up && jasmine-ts && node node_modules/db-migrate db:drop test",
+    "jasmine": "ENV=test jasmine",
+    "test": "ENV=test node node_modules/db-migrate --env test up && npm run jasmine && node node_modules/db-migrate db:drop test",
     "build": "npx tsc",
     "dev": "ts-node src/index",
     "start": "npm run build && node build/index"

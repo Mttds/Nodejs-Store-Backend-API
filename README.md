@@ -30,25 +30,30 @@ The .env file in the application root folder contains the following variables:
 
 ## API Endpoints
 
-| Type                              | URI                                  | Method   | Authentication/Authorization
-| --------------------------------- | ------------------------------------ | -------- | ------------
-| Products INDEX route              | /products/                           | [GET]    | None
-| Products INDEX by category        | /products?category=:category         | [GET]    | None
-| Products SHOW route               | /products/:id                        | [GET]    | None
-| Products CREATE route             | /products/                           | [POST]   | JWT Token
-| Products DELETE route             | /products/:id                        | [POST]   | JWT Token
-| Users INDEX route                 | /users/                              | [GET]    | JWT Token
-| Users SHOW route                  | /users/:id                           | [GET]    | JWT Token
-| Users CREATE route                | /users/                              | [POST]   | Signed JWT Token Returned
-| Users AUTH route                  | /users/authenticate                  | [POST]   | Password
-| Orders INDEX route                | /orders/                             | [GET]    | JWT Token
-| Orders SHOW route                 | /orders/:id                          | [GET]    | JWT Token
-| Orders CREATE route               | /orders/                             | [POST]   | JWT Token
-| Orders DELETE route               | /orders/:id                          | [POST]   | JWT Token
-| Orders ADDITEM route              | /orders/:id/items                    | [POST]   | JWT Token
-| Orders SUBMIT route               | /orders/:id/submit                   | [POST]   | JWT Token
-| Current Order by user             | /orders/current?username=:username   | [GET]    | JWT Token
-| Completed Orders by user          | /orders/completed?username=:username | [GET]    | JWT Token
+| Type                                | URI                                  | Method   | Authentication/Authorization
+| ----------------------------------- | ------------------------------------ | -------- | ------------
+| Products INDEX route                | /products/                           | [GET]    | None
+| Products INDEX by category          | /products?category=:category         | [GET]    | None
+| Products SHOW route                 | /products/:id                        | [GET]    | None
+| Products CREATE route               | /products/                           | [POST]   | JWT Token
+| Products DELETE route               | /products/:id                        | [POST]   | JWT Token
+| Users INDEX route                   | /users/                              | [GET]    | JWT Token
+| Users SHOW route                    | /users/:id                           | [GET]    | JWT Token
+| Users CREATE route                  | /users/                              | [POST]   | Signed JWT Token Returned
+| Users AUTH route                    | /users/authenticate                  | [POST]   | Password, Signed JWT Token Returned
+| Orders INDEX route                  | /orders/                             | [GET]    | JWT Token
+| Orders SHOW route                   | /orders/:id                          | [GET]    | JWT Token
+| Orders CREATE route                 | /orders/                             | [POST]   | JWT Token
+| Orders DELETE route                 | /orders/:id                          | [POST]   | JWT Token
+| Orders ADDITEM route                | /orders/:id/items                    | [POST]   | JWT Token
+| Orders SUBMIT route                 | /orders/:id/submit                   | [POST]   | JWT Token
+| Current Order by user               | /orders/current?username=:username   | [GET]    | JWT Token
+| Completed Orders by user            | /orders/completed?username=:username | [GET]    | JWT Token
+| Dashboard products in orders (cart) | /dashboard/products-in-orders        | [GET]    | JWT Token
+
+The Orders SUBMIT route will change the status of the order id in the URI HTTP request from active to completed.
+
+The Dashboard products in orders (cart) route will return a view with each item associated to its quantity, username and order id.
 
 ## Database
 
