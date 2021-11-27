@@ -120,4 +120,4 @@ describe("Order Model", () => {
     const _result = await storeUser.delete(userid);
     expect(result).toBeUndefined();
   });
-})
+});

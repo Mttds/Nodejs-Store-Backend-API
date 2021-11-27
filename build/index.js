@@ -72,3 +72,4 @@ app.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, func
 app.listen(3000, function () {
     console.log("starting app on: ".concat(address));
 });
+exports.default = app;

@@ -3,6 +3,10 @@
 ## NPM scripts
 
 To setup all the required packages run: `npm install` in the project root folder. It will install the packages listed in package.json.
+Test suite: `npm run test`
+Start the server with the src directory (dev): `npm run dev`
+Compile the Typescript src into Javascript in the build directory: `npm run build`
+Start the server with the compiled build directory: `npm run start`
 
 ## Required Technologies
 
@@ -40,6 +44,7 @@ The .env file in the application root folder contains the following variables:
 | Users INDEX route                   | /users/                              | [GET]    | JWT Token
 | Users SHOW route                    | /users/:id                           | [GET]    | JWT Token
 | Users CREATE route                  | /users/                              | [POST]   | Signed JWT Token Returned
+| Users DESTROY route                 | /users/:id                           | [POST]   | JWT Token
 | Users AUTH route                    | /users/authenticate                  | [POST]   | Password, Signed JWT Token Returned
 | Orders INDEX route                  | /orders/                             | [GET]    | JWT Token
 | Orders SHOW route                   | /orders/:id                          | [GET]    | JWT Token

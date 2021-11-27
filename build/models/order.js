@@ -156,7 +156,7 @@ var OrderStore = /** @class */ (function () {
     };
     OrderStore.prototype.addItem = function (quantity, orderId, itemId) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, status, productAlreadyInCart, order, err_5;
+            var sql, conn, result, status_1, productAlreadyInCart, order, err_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -168,10 +168,10 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(sql, [orderId])];
                     case 2:
                         result = _a.sent();
-                        status = result.rows[0]['status'];
+                        status_1 = result.rows[0]['status'];
                         conn.release();
-                        if (status !== "active") {
-                            throw new Error("Could not add product ".concat(itemId, " to order ").concat(orderId, " because order status is ").concat(status));
+                        if (status_1 !== "active") {
+                            throw new Error("Could not add product ".concat(itemId, " to order ").concat(orderId, " because order status is ").concat(status_1));
                         }
                         sql = "SELECT id FROM order_items WHERE order_id = $1 and item_id = $2";
                         return [4 /*yield*/, database_1.default.connect()];

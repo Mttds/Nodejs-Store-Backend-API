@@ -49,6 +49,7 @@ var index = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //console.log("[users] - index called");
                 try {
                     jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
                 }
@@ -70,6 +71,7 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //console.log("[users] - show called");
                 try {
                     jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
                 }
@@ -78,7 +80,7 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                     res.json("Invalid token ".concat(err));
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, store.show(req.body.id)];
+                return [4 /*yield*/, store.show(req.params.id)];
             case 1:
                 user = _a.sent();
                 res.json(user);
@@ -115,8 +117,39 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
+var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var deleted, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                //console.log("[users] - destroy called");
+                try {
+                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                }
+                catch (err) {
+                    res.status(401); // unauthorized
+                    res.json("Invalid token ".concat(err));
+                    return [2 /*return*/];
+                }
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, store.delete(req.params.id)];
+            case 2:
+                deleted = _a.sent();
+                res.json(deleted);
+                return [3 /*break*/, 4];
+            case 3:
+                err_2 = _a.sent();
+                res.status(400);
+                res.json({ err: err_2 });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
 var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, authenticatedUser, token, err_2;
+    var user, authenticatedUser, token, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -135,14 +168,15 @@ var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0
                 if (authenticatedUser === null) {
                     res.status(401);
                     res.json("Username not found or wrong password for ".concat(user.username));
+                    return [2 /*return*/];
                 }
                 token = jsonwebtoken_1.default.sign({ user: authenticatedUser }, process.env.TOKEN_SECRET);
                 res.json(token);
                 return [3 /*break*/, 4];
             case 3:
-                err_2 = _a.sent();
+                err_3 = _a.sent();
                 res.status(400);
-                res.json(err_2 + user);
+                res.json(err_3 + user);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -153,5 +187,6 @@ var users_routes = function (app) {
     app.get('/users/:id', show);
     app.post('/users', create);
     app.post('/users/authenticate', authenticate);
+    app.post('/users/:id', destroy);
 };
 exports.default = users_routes;

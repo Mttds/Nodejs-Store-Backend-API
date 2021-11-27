@@ -46,7 +46,7 @@ describe("User Model", function () {
     it("should have an index method", function () {
         expect(store.index).toBeDefined();
     });
-    it("index method should return a list of records", function () { return __awaiter(void 0, void 0, void 0, function () {
+    it("index method should return a list of records", function (done) { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
