@@ -22,7 +22,7 @@ export class OrderStore {
       const conn = await dbclient.connect();
       const sql = 'SELECT * FROM orders';
       const result = await conn.query(sql);
-      conn.release;
+      conn.release();
       return result.rows;
     } catch (err) {
       throw new Error(`Cannot get orders ${err}`);
@@ -193,7 +193,7 @@ export class OrderStore {
       const sql = "SELECT o.* FROM orders o JOIN users u ON o.user_id = u.id WHERE u.username = ($1) and o.status = 'completed'";
       const result = await conn.query(sql, [username]);
       
-      conn.release;
+      conn.release();
       return result.rows;
     } catch (err) {
       throw new Error(`Cannot get completed orders for user ${username}. Error: ${err}`);

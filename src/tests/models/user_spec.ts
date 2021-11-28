@@ -8,7 +8,7 @@ describe("User Model", () => {
     expect(store.index).toBeDefined();
   });
 
-  it("index method should return a list of records", async (done) => {
+  it("index method should return a list of records", async () => {
     const result = await store.index();
     expect(result).toEqual([]);
   });

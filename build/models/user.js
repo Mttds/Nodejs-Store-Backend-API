@@ -63,7 +63,7 @@ var UserStore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(sql)];
                     case 2:
                         result = _a.sent();
-                        conn.release;
+                        conn.release();
                         return [2 /*return*/, result.rows];
                     case 3:
                         err_1 = _a.sent();
@@ -170,6 +170,7 @@ var UserStore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(sql, [username])];
                     case 2:
                         result = _a.sent();
+                        conn.release();
                         if (result.rows.length) {
                             user = result.rows[0];
                             if (bcrypt_1.default.compareSync(password + pepper, user.password_digest)) {

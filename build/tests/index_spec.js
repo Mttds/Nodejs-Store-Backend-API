@@ -43,10 +43,10 @@ var supertest_1 = __importDefault(require("supertest"));
 var index_1 = __importDefault(require("../index"));
 var request = (0, supertest_1.default)(index_1.default);
 var user = { firstname: 'testendpoint', lastname: 'testendpoint', username: 'testendpoint', password: 'testendpoint' };
+var product = { name: 'testproduct', type: 'test', category: 'testcategory', weight: 1, price: 1 };
 var userId = "0";
 var productId = "0";
 var orderId = "0";
-var product = { name: 'testproduct', type: 'test', category: 'testcategory', weight: 1, price: 1 };
 var token = "";
 describe('Endpoint tests', function () {
     //==================================================================
@@ -67,7 +67,7 @@ describe('Endpoint tests', function () {
         });
     }); });
     // index without authorization
-    it('gets the users endpoint with no request body to get an unathorized (no token provided)', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('gets the users endpoint with no request body to get an unauthorized (no token provided)', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {

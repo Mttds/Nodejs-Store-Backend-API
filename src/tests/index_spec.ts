@@ -20,7 +20,7 @@ describe('Endpoint tests', () => {
   });
 
   // index without authorization
-  it('gets the users endpoint with no request body to get an unathorized (no token provided)', async () => {
+  it('gets the users endpoint with no request body to get an unauthorized (no token provided)', async () => {
     const response = await request.get('/users');
     expect(response.status).toBe(401);
   });

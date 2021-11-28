@@ -60,7 +60,7 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(sql)];
                     case 2:
                         result = _a.sent();
-                        conn.release;
+                        conn.release();
                         return [2 /*return*/, result.rows];
                     case 3:
                         err_1 = _a.sent();
@@ -293,7 +293,7 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(sql, [username])];
                     case 2:
                         result = _a.sent();
-                        conn.release;
+                        conn.release();
                         return [2 /*return*/, result.rows];
                     case 3:
                         err_8 = _a.sent();

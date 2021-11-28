@@ -20,7 +20,7 @@ export class UserStore {
         const conn = await dbclient.connect();
         const sql = 'SELECT * FROM users';
         const result = await conn.query(sql);
-        conn.release;
+        conn.release();
         return result.rows;
     } catch (err) {
         throw new Error(`Cannot get users ${err}`);
@@ -87,6 +87,7 @@ export class UserStore {
     const sql = 'SELECT * FROM users WHERE username = $1';
 
     const result = await conn.query(sql, [username]);
+    conn.release();
 
     if(result.rows.length) {
       const user = result.rows[0];
