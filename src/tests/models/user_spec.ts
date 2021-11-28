@@ -10,7 +10,7 @@ describe("User Model", () => {
 
   it("index method should return a list of records", async () => {
     const result = await store.index();
-    expect(result).toEqual([]);
+    expect(result).toHaveSize(result.length);
   });
 
   it("show method should return a single object after creating the user with create", async () => {
