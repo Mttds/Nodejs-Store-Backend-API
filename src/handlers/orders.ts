@@ -8,8 +8,14 @@ dotenv.config();
 const store = new OrderStore();
 
 const index = async (req: Request, res: Response) => {
+  //console.log('[orders] - index');
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -20,8 +26,14 @@ const index = async (req: Request, res: Response) => {
 }
 
 const show = async (req: Request, res: Response) => {
+  //console.log('[orders] - show');
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -32,8 +44,14 @@ const show = async (req: Request, res: Response) => {
 }
 
 const create = async (req: Request, res: Response) => {
+  //console.log('[orders] - create');
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -54,9 +72,39 @@ const create = async (req: Request, res: Response) => {
   }
 }
 
-const addItem = async (req: Request, res: Response) => {
+const destroy = async (req: Request, res: Response) => {
+  //console.log('[orders] - destroy');
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
+  } catch (err) {
+    res.status(401); // unauthorized
+    res.json(`Invalid token ${err}`);
+    return;
+  }
+
+  try {
+    const deleted = await store.delete(req.params.id);
+    res.json(deleted);
+  } catch (err) {
+    res.status(400);
+    res.json({err});
+  }
+}
+
+const addItem = async (req: Request, res: Response) => {
+  //console.log('[orders] - addItem');
+  try {
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -77,8 +125,14 @@ const addItem = async (req: Request, res: Response) => {
 }
 
 const submit = async (req: Request, res: Response) => {
+  //console.log('[orders] - submit');
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -97,8 +151,14 @@ const submit = async (req: Request, res: Response) => {
 }
 
 const currentOrder = async (req: Request, res: Response) => {
+  //console.log('[orders] - currentOrder');
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -121,9 +181,14 @@ const currentOrder = async (req: Request, res: Response) => {
 }
 
 const completedOrders = async (req: Request, res: Response) => {
-  console.log("HEY");
+  //console.log('[orders] - completedOrders');
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -150,9 +215,10 @@ const order_routes = (app: express.Application) => {
   app.get('/orders/completed', completedOrders);
   app.get('/orders', index);
   app.get('/orders/:id', show);
-  app.post('/orders', create);
   app.post('/orders/:id/items', addItem);
   app.post('/orders/:id/submit', submit);
+  app.post('/orders/:id', destroy);
+  app.post('/orders', create);
 }
 
 export default order_routes;

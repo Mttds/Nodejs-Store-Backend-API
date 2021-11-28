@@ -154,63 +154,78 @@ var OrderStore = /** @class */ (function () {
             });
         });
     };
+    /*async updateItem(quantity: number, orderId: string, itemId: string) {
+      try {
+        let conn = await dbclient.connect();
+        console.log(`Product not present in order_items. Will insert new quantity ${quantity} for product id ${itemId} and order id ${orderId}.`);
+        const sqlinsert = "INSERT INTO order_items (quantity, order_id, item_id) values ($1, $2, $3) RETURNING *";
+        const result = await conn.query(sqlinsert, [quantity, orderId, itemId]);
+        conn.release();
+        return result;
+      } catch (err) {
+        throw new Error(`Could not insert new order item with quantity ${quantity}, order id ${orderId}, and item id ${itemId}: ${err}`);
+      }
+    }
+  
+    async insertItem(quantity: number, orderItemId: string) {
+      try {
+        let conn = await dbclient.connect();
+        console.log(`Product already present in order_items with id ${orderItemId}. Will increase its quantity by ${quantity}.`);
+        const sqlupdate = "UPDATE order_items SET quantity = quantity + $1 WHERE id = $2 RETURNING *";
+        const result = await conn.query(sqlupdate, [quantity, orderItemId]);
+        conn.release();
+        return result;
+      } catch (err) {
+        throw new Error(`Could not update quantity ${quantity} for order item ${orderItemId}: ${err}`);
+      }
+    }
+  
+    async checkItemInOrder(orderId: string, itemId: string): Promise<OrderItem> {
+      try {
+        let conn = await dbclient.connect();
+        console.log(`Checking if there is an existing record for order id ${orderId} and item id ${itemId} in order items.`);
+        const sql = "SELECT id, quantity, order_id, item_id FROM order_items WHERE order_id = $1 and item_id = $2";
+        const result = await conn.query(sql, [orderId, itemId]);
+        conn.release();
+        console.log(result.rows[0]);
+        return result.rows[0];
+      } catch (err) {
+        throw new Error(`Error during query execution: ${err}`);
+      }
+    }*/
     OrderStore.prototype.addItem = function (quantity, orderId, itemId) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, status_1, productAlreadyInCart, order, err_5;
+            var conn, sqlupsert, result, order, err_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 10, , 11]);
-                        sql = "SELECT status FROM orders WHERE id = $1";
+                        _a.trys.push([0, 3, , 4]);
+                        //let sql = "SELECT status FROM orders WHERE id = $1";
+                        //let conn = await dbclient.connect();
+                        //let result = await conn.query(sql, [orderId]);
+                        //const status = result.rows[0]['status'];
+                        //console.log(`Retrieved status ${status} for order with id ${orderId}.`);
+                        //conn.release();
+                        //if (status != "active") {
+                        //  throw new Error(`Could not add product ${itemId} to order ${orderId} because order status is ${status}`);
+                        //}
+                        console.log("[order] - addItem");
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [orderId])];
+                        sqlupsert = "INSERT INTO order_items (quantity, order_id, item_id) values ($1, $2, $3)";
+                        sqlupsert = sqlupsert + " ON CONFLICT ON CONSTRAINT order_items_order_id_item_id_key do UPDATE SET quantity = $1 RETURNING *";
+                        return [4 /*yield*/, conn.query(sqlupsert, [quantity, orderId, itemId])];
                     case 2:
                         result = _a.sent();
-                        status_1 = result.rows[0]['status'];
-                        conn.release();
-                        if (status_1 !== "active") {
-                            throw new Error("Could not add product ".concat(itemId, " to order ").concat(orderId, " because order status is ").concat(status_1));
-                        }
-                        sql = "SELECT id FROM order_items WHERE order_id = $1 and item_id = $2";
-                        return [4 /*yield*/, database_1.default.connect()];
-                    case 3:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [orderId, itemId])];
-                    case 4:
-                        result = _a.sent();
-                        productAlreadyInCart = "";
-                        if (result.rows[0] != undefined && 'id' in result.rows[0]) {
-                            productAlreadyInCart = result.rows[0]['id'];
-                        }
-                        conn.release();
-                        if (productAlreadyInCart !== "") {
-                            sql = "UPDATE order_items SET quantity = quantity + $1 WHERE id = $2";
-                        }
-                        else {
-                            sql = "INSERT INTO order_items (quantity, order_id, item_id) values ($1, $2, $3)";
-                        }
-                        return [4 /*yield*/, database_1.default.connect()];
-                    case 5:
-                        conn = _a.sent();
-                        if (!(productAlreadyInCart !== "")) return [3 /*break*/, 7];
-                        return [4 /*yield*/, conn.query(sql, [quantity, productAlreadyInCart])];
-                    case 6:
-                        result = _a.sent();
-                        return [3 /*break*/, 9];
-                    case 7: return [4 /*yield*/, conn.query(sql, [quantity, orderId, itemId])];
-                    case 8:
-                        result = _a.sent();
-                        _a.label = 9;
-                    case 9:
                         order = result.rows[0];
+                        console.log(order);
                         conn.release();
                         return [2 /*return*/, order];
-                    case 10:
+                    case 3:
                         err_5 = _a.sent();
                         throw new Error("Could not add item ".concat(itemId, " to order ").concat(orderId, ": ").concat(err_5));
-                    case 11: return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -222,7 +237,7 @@ var OrderStore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = "UPDATE orders SET status = 'completed' WHERE id = $1";
+                        sql = "UPDATE orders SET status = 'completed' WHERE id = $1 RETURNING *";
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();

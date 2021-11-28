@@ -81,7 +81,7 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
     });
 }); };
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product, newProduct, err_1;
+    var product, authorizationHeader, token, newProduct, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -93,12 +93,12 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     price: req.body.price
                 };
                 try {
-                    // the token should be retrieved from the authorizazion header after the Bearer string
-                    // but for simplicity we put it as part of the request body for now
-                    //const authorizationHeader: string = (req.headers.authorization as string);
-                    //const token = authorizationHeader.split(' ')[1];
-                    //jwt.verify(token, (process.env.TOKEN_SECRET as string));
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -129,7 +129,10 @@ var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
             case 0:
                 try {
                     authorizationHeader = req.headers.authorization;
-                    token = authorizationHeader.split(' ')[1];
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
                     jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {

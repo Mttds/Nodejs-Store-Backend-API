@@ -41,50 +41,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
 var index_1 = __importDefault(require("../index"));
-var database_1 = __importDefault(require("../database/database"));
 var request = (0, supertest_1.default)(index_1.default);
 var user = { firstname: 'testendpoint', lastname: 'testendpoint', username: 'testendpoint', password: 'testendpoint' };
+var userId = "0";
+var productId = "0";
+var orderId = "0";
+var product = { name: 'testproduct', type: 'test', category: 'testcategory', weight: 1, price: 1 };
 var token = "";
 describe('Endpoint tests', function () {
-    //==================================================================
-    // Products
-    //==================================================================
-    it('gets the products endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/products')];
-                case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(200);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('gets the products endpoint with id 1', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/products/1')];
-                case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(200);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('gets the products endpoint with category test', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/products?category=test')];
-                case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(200);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
     //==================================================================
     // Users
     //==================================================================
@@ -117,14 +81,15 @@ describe('Endpoint tests', function () {
     }); });
     // index with authorization
     it('gets the users endpoint providing a token', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var body, response;
+        var headers, response;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    body = { 'token': token };
-                    return [4 /*yield*/, request.get('/users').send(body)];
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    return [4 /*yield*/, request.get('/users').set(headers)];
                 case 1:
                     response = _a.sent();
+                    userId = response.body[0].id;
                     expect(response.status).toBe(200);
                     return [2 /*return*/];
             }
@@ -137,7 +102,6 @@ describe('Endpoint tests', function () {
             switch (_a.label) {
                 case 0:
                     body = { 'username': user.username, 'password': user.password };
-                    console.log(body);
                     return [4 /*yield*/, request.post('/users/authenticate').send(body)];
                 case 1:
                     response = _a.sent();
@@ -146,35 +110,74 @@ describe('Endpoint tests', function () {
             }
         });
     }); });
-    // delete with authorization
-    it('posts to the users/:id endpoint to delete the created user', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var userId, sql, conn, result, err_1, body, response;
+    //==================================================================
+    // Products
+    //==================================================================
+    // index
+    it('gets the products endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/products')];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // show
+    it('gets the products endpoint with id 1', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/products/1')];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // index by category
+    it('gets the products endpoint with category testcategory', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/products?category=testcategory')];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // create
+    it('posts to the products endpoint to create a product', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var headers, response;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    userId = "0";
-                    _a.label = 1;
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    return [4 /*yield*/, request.post('/products').set(headers).send(product)];
                 case 1:
-                    _a.trys.push([1, 4, , 5]);
-                    sql = 'SELECT id FROM users WHERE 1=1';
-                    return [4 /*yield*/, database_1.default.connect()];
-                case 2:
-                    conn = _a.sent();
-                    return [4 /*yield*/, conn.query(sql)];
-                case 3:
-                    result = _a.sent();
-                    userId = result.rows[0].id;
-                    conn.release();
-                    return [3 /*break*/, 5];
-                case 4:
-                    err_1 = _a.sent();
-                    throw new Error("Could not find user with id ".concat(userId, ". Error: ").concat(err_1));
-                case 5:
-                    body = { 'token': token };
-                    return [4 /*yield*/, request.post("/users/".concat(userId)).send(body)];
-                case 6:
                     response = _a.sent();
                     expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // index by category after product creation
+    it('gets the products endpoint with category testcategory after creating a product for the category', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/products?category=testcategory')];
+                case 1:
+                    response = _a.sent();
+                    productId = response.body[0].id;
+                    expect(response.status).toBe(200);
+                    expect(response.body[0].name).toEqual("testproduct");
                     return [2 /*return*/];
             }
         });
@@ -182,13 +185,110 @@ describe('Endpoint tests', function () {
     //==================================================================
     // Orders
     //==================================================================
-    it('gets the orders endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var body, response;
+    // create
+    it('posts to the orders endpoint to create an order with the previously created user', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var headers, order, response;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    body = { 'token': token };
-                    return [4 /*yield*/, request.get('/orders').send(body)];
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    order = { 'user_id': userId, 'status': 'active' };
+                    return [4 /*yield*/, request.post('/orders').set(headers).send(order)];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // index
+    it('gets the orders endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var headers, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    return [4 /*yield*/, request.get('/orders').set(headers)];
+                case 1:
+                    response = _a.sent();
+                    orderId = response.body[0].id;
+                    expect(response.body[0].status).toBe("active");
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // orders/current
+    it('gets the orders/current?username=:username endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var headers, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    return [4 /*yield*/, request.get('/orders/current').query({ 'username': 'testendpoint' }).set(headers)];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('gets the orders/completed?username=:username endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var headers, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    return [4 /*yield*/, request.get('/orders/completed').query({ 'username': 'testendpoint' }).set(headers)];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    //==================================================================
+    // Cleanup using delete endpoints for users, products, and orders
+    // Must be done in the correct order due to database foreign keys
+    //==================================================================
+    // delete the created order with authorization
+    it('posts to the orders/:id endpoint to delete the created order', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var headers, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    return [4 /*yield*/, request.post("/orders/".concat(orderId)).set(headers)];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // delete the created product with authorization
+    it('posts to the products/:id endpoint to delete the created product', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var headers, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    return [4 /*yield*/, request.post("/products/".concat(productId)).set(headers)];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // delete the created user with authorization
+    it('posts to the users/:id endpoint to delete the created user', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var headers, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+                    return [4 /*yield*/, request.post("/users/".concat(userId)).set(headers)];
                 case 1:
                     response = _a.sent();
                     expect(response.status).toBe(200);

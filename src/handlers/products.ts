@@ -33,12 +33,15 @@ const create = async (req: Request, res: Response) => {
   };
 
   try {
-    // the token should be retrieved from the authorizazion header after the Bearer string
-    // but for simplicity we put it as part of the request body for now
-    //const authorizationHeader: string = (req.headers.authorization as string);
-    //const token = authorizationHeader.split(' ')[1];
-    //jwt.verify(token, (process.env.TOKEN_SECRET as string));
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    // The token is retrieved from the authorizazion header after the Bearer string
+    // See https://learning.postman.com/docs/sending-requests/authorization/#bearer-token
+    // for an example request using Postman.
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -56,8 +59,11 @@ const create = async (req: Request, res: Response) => {
 
 const destroy = async (req: Request, res: Response) => {
   try {
-    const authorizationHeader = (req.headers.authorization as string);
-    const token = authorizationHeader.split(' ')[1];
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
     jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401);

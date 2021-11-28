@@ -3,9 +3,13 @@
 ## NPM scripts
 
 To setup all the required packages run: `npm install` in the project root folder. It will install the packages listed in package.json.
+
 Test suite: `npm run test`
+
 Start the server with the src directory (dev): `npm run dev`
+
 Compile the Typescript src into Javascript in the build directory: `npm run build`
+
 Start the server with the compiled build directory: `npm run start`
 
 ## Required Technologies
@@ -59,6 +63,16 @@ The .env file in the application root folder contains the following variables:
 The Orders SUBMIT route will change the status of the order id in the URI HTTP request from active to completed.
 
 The Dashboard products in orders (cart) route will return a view with each item associated to its quantity, username and order id.
+
+## Getting a JWT Token
+
+In order to be able to test most of the endpoints we need to provide a valid JWT Token for Authorization otherwise a 401 HTTP status will be returned (Unauthorized).
+
+There are two ways to do so:
+1) Creating a user using the POST request at the /users endpoint providing firstname, lastname, username, and password. A signed token will be returned in the request body;
+2) If we already have a valid username/password we can POST a request to /users/authenticate and a valid token will be returned in the request body if the tuple is correct (i.e username is in the database and the provided password is validated against the hashed password saved for that user);
+
+The token can then be used by providing it in the Bearer Token field of the Authorization section (for example using Postman to make requests).
 
 ## Database
 
@@ -128,6 +142,8 @@ The file database.json in the root folder should be created with the following s
 | order_id         | BIGINT             | Foreign Key to orders.id
 | item_id          | BIGINT             | Foreign Key to products.id
 
+Additional constraints: UNIQUE (order_id, item_id)
+
 # Class Models
 
 | Class            | Object               
@@ -150,8 +166,6 @@ JWT is used for enpoint authorization except for the Products GET endpoints whic
 
 # DB Creation & Migration
 
-- Run the create table scripts
-node node_modules/db-migrate up
+- Run the create table scripts: `node node_modules/db-migrate up`
 
-- Run the drop table scripts
-node node_modules/db-migrate down
+- Run the drop table scripts: `node node_modules/db-migrate down`

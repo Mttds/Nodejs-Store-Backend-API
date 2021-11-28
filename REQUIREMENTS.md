@@ -58,3 +58,5 @@ Users need to be able to browse an index of all products, see the specifics of a
 | quantity         | INTEGER            |
 | order_id         | BIGINT             | Foreign Key to orders.id
 | item_id          | BIGINT             | Foreign Key to products.id
+
+Additional constraints: UNIQUE (order_id, item_id)

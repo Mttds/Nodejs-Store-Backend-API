@@ -45,13 +45,18 @@ var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 var store = new user_1.UserStore();
 var index = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
+    var authorizationHeader, token, users;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 //console.log("[users] - index called");
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -67,13 +72,18 @@ var index = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var authorizationHeader, token, user;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 //console.log("[users] - show called");
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -118,13 +128,18 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var deleted, err_2;
+    var authorizationHeader, token, deleted, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 //console.log("[users] - destroy called");
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized

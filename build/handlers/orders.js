@@ -46,12 +46,18 @@ var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 var store = new order_1.OrderStore();
 var index = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var orders;
+    var authorizationHeader, token, orders;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //console.log('[orders] - index');
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -67,12 +73,18 @@ var index = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var order;
+    var authorizationHeader, token, order;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //console.log('[orders] - show');
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -88,12 +100,18 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
     });
 }); };
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var order, newOrder, err_1;
+    var authorizationHeader, token, order, newOrder, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //console.log('[orders] - create');
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -121,13 +139,55 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
-var addItem = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var orderId, itemId, quantity, addedItem, err_2;
+var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var authorizationHeader, token, deleted, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //console.log('[orders] - destroy');
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
+                }
+                catch (err) {
+                    res.status(401); // unauthorized
+                    res.json("Invalid token ".concat(err));
+                    return [2 /*return*/];
+                }
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, store.delete(req.params.id)];
+            case 2:
+                deleted = _a.sent();
+                res.json(deleted);
+                return [3 /*break*/, 4];
+            case 3:
+                err_2 = _a.sent();
+                res.status(400);
+                res.json({ err: err_2 });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+var addItem = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var authorizationHeader, token, orderId, itemId, quantity, addedItem, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                //console.log('[orders] - addItem');
+                try {
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -146,8 +206,8 @@ var addItem = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 res.json(addedItem);
                 return [3 /*break*/, 4];
             case 3:
-                err_2 = _a.sent();
-                res.json(err_2);
+                err_3 = _a.sent();
+                res.json(err_3);
                 res.status(400);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -155,12 +215,18 @@ var addItem = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 var submit = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var orderId, submittedOrder, err_3;
+    var authorizationHeader, token, orderId, submittedOrder, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //console.log('[orders] - submit');
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -177,21 +243,27 @@ var submit = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 res.json(submittedOrder);
                 return [3 /*break*/, 4];
             case 3:
-                err_3 = _a.sent();
+                err_4 = _a.sent();
                 res.status(400);
-                res.json(err_3);
+                res.json(err_4);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 var currentOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var query, username, order, err_4;
+    var authorizationHeader, token, query, username, order, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //console.log('[orders] - currentOrder');
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -212,22 +284,27 @@ var currentOrder = function (req, res) { return __awaiter(void 0, void 0, void 0
                 res.json(order);
                 return [3 /*break*/, 4];
             case 3:
-                err_4 = _a.sent();
+                err_5 = _a.sent();
                 res.status(400);
-                res.json(err_4);
+                res.json(err_5);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 var completedOrders = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var query, username, orders, err_5;
+    var authorizationHeader, token, query, username, orders, err_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log("HEY");
+                //console.log('[orders] - completedOrders');
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
@@ -248,9 +325,9 @@ var completedOrders = function (req, res) { return __awaiter(void 0, void 0, voi
                 res.json(orders);
                 return [3 /*break*/, 4];
             case 3:
-                err_5 = _a.sent();
+                err_6 = _a.sent();
                 res.status(400);
-                res.json(err_5);
+                res.json(err_6);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -261,8 +338,9 @@ var order_routes = function (app) {
     app.get('/orders/completed', completedOrders);
     app.get('/orders', index);
     app.get('/orders/:id', show);
-    app.post('/orders', create);
     app.post('/orders/:id/items', addItem);
     app.post('/orders/:id/submit', submit);
+    app.post('/orders/:id', destroy);
+    app.post('/orders', create);
 };
 exports.default = order_routes;

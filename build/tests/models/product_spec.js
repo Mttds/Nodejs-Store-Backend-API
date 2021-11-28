@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var products_1 = require("../../models/products");
 var database_1 = __importDefault(require("../../database/database"));
 var store = new products_1.ProductStore();
-describe("Product Model", function () {
+fdescribe("Product Model", function () {
     it("should have an index method", function () {
         expect(store.index).toBeDefined();
     });

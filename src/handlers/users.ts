@@ -9,7 +9,12 @@ const store = new UserStore();
 const index = async (req: Request, res: Response) => {
   //console.log("[users] - index called");
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -22,7 +27,12 @@ const index = async (req: Request, res: Response) => {
 const show = async (req: Request, res: Response) => {
   //console.log("[users] - show called");
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);
@@ -54,7 +64,12 @@ const create = async (req: Request, res: Response) => {
 const destroy = async (req: Request, res: Response) => {
   //console.log("[users] - destroy called");
   try {
-    jwt.verify(req.body.token, (process.env.TOKEN_SECRET as string));
+    const authorizationHeader: string = (req.headers.authorization as string);
+    let token = "";
+    if(authorizationHeader != undefined) {
+      token = authorizationHeader.split(' ')[1];
+    }
+    jwt.verify(token, (process.env.TOKEN_SECRET as string));
   } catch (err) {
     res.status(401); // unauthorized
     res.json(`Invalid token ${err}`);

@@ -46,12 +46,17 @@ var dashboard_routes = function (app) {
 };
 var dashboard = new dashboard_1.DashboardQueries();
 var productInOrders = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var items;
+    var authorizationHeader, token, items;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 try {
-                    jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
+                    authorizationHeader = req.headers.authorization;
+                    token = "";
+                    if (authorizationHeader != undefined) {
+                        token = authorizationHeader.split(' ')[1];
+                    }
+                    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET);
                 }
                 catch (err) {
                     res.status(401); // unauthorized
