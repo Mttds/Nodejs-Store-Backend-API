@@ -90,7 +90,9 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     type: req.body.type,
                     category: req.body.category,
                     weight: req.body.weight,
-                    price: req.body.price
+                    price: req.body.price,
+                    description: req.body.description,
+                    url: req.body.url
                 };
                 try {
                     authorizationHeader = req.headers.authorization;

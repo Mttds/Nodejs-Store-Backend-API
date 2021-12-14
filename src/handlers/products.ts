@@ -29,7 +29,9 @@ const create = async (req: Request, res: Response) => {
     type: req.body.type,
     category: req.body.category,
     weight: req.body.weight,
-    price: req.body.price
+    price: req.body.price,
+    description: req.body.description,
+    url: req.body.url
   };
 
   try {

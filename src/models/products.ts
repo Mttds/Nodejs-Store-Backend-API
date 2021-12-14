@@ -6,6 +6,8 @@ export type Product = {
   type: string;
   category: string;
   weight: number;
+  description: string;
+  url: string;
   price: number;
 };
 
@@ -48,9 +50,9 @@ export class ProductStore {
 
   async create(b: Product): Promise<Product> {
     try {
-      const sql = 'INSERT INTO products (name, type, category, weight, price) VALUES($1, $2, $3, $4, $5) RETURNING *';
+      const sql = 'INSERT INTO products (name, type, category, weight, price, description, url) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
       const conn = await dbclient.connect();
-      const result = await conn.query(sql, [b.name, b.type, b.category, b.weight, b.price]);
+      const result = await conn.query(sql, [b.name, b.type, b.category, b.weight, b.price, b.description, b.url]);
       const product = result.rows[0];
       conn.release();
       return product;

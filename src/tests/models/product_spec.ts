@@ -18,6 +18,8 @@ describe("Product Model", () => {
       name: "test",
       type: "test",
       category: "test",
+      url: "",
+      description: "test",
       weight: 1,
       price: 1
     }
