@@ -48,7 +48,15 @@ var orders_1 = __importDefault(require("./handlers/orders"));
 var dashboard_1 = __importDefault(require("./handlers/dashboard"));
 var app = (0, express_1.default)();
 var address = "127.0.0.1:3000";
+// middleware to extract the entire body portion of an incoming request stream and expose it on req.body.
 app.use(body_parser_1.default.json());
+// middleware to allow CORS requests from another application on the specified URL (i.e Angular applications that requests)
+// the data with a GET request to this API
+app.use(function (_req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var store, products;
     return __generator(this, function (_a) {
